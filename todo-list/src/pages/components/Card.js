@@ -20,7 +20,7 @@ function Card(props) {
 
 <p type='completed'  id="date"  name="date" className="mb-3 font-normal text-gray-700 dark:text-gray-400">{props.completed}</p>
 
- 
+<p type='completed'  id="date"  name="date" className="mb-3 font-normal text-gray-700 dark:text-gray-400">{props.timer}</p>
 
  <a href="#" className="inline-flex m-2  items-center px-3 py-2 text-sm font-medium text-center text-white bg-red-700 rounded-lg hover:bg-Red-800 focus:ring-4 focus:outline-none focus:ring-red-300 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-800" onClick={props.delFun}>
         Delete

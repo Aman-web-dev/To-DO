@@ -1,31 +1,63 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import Card from './Card'
 
 function List() {
-    const [timeLeft,setTimeLeft]=useState("")
+    const [timeLeft,setTimeLeft]=useState([])
     const [todo,setTodo]=useState([])
     const [contentEditable,setContentEditable]=useState(false)
+    
     const [formData,setForm]=useState({
         todo:"",
         date:"",
-        completed:""
+        completed:"",
+      
     })
 const handleSubmit=(event)=>{
   event.preventDefault();
-  const newTodo={
-      todo:formData.todo,
-      date:formData.date,
-      completed:formData.completed
+ 
+  const currentDate = new Date();
+  const upcomingDate = new Date(formData.date);
+  const timeDifference = upcomingDate - currentDate; // Difference in milliseconds
+  const days = Math.floor(timeDifference / (1000 * 60 * 60 * 24));
+  const hours = Math.floor((timeDifference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+  const minutes = Math.floor((timeDifference % (1000 * 60 * 60)) / (1000 * 60));
+  
+  
+  console.log(`Time difference: ${days} days, ${hours} hours, ${minutes} minutes`)
+  const newTodo = {
+    todo: formData.todo,
+    date: formData.date,
+    completed: formData.completed,
   }
-  const date=new Date().toLocaleDateString('en-GB');
 
-  console.log(date,newTodo.date)
-  setTodo([...todo,newTodo])
+setTimeLeft([...timeLeft,`Time difference: ${days} days, ${hours} hours, ${minutes} minutes`])
+
+handleTimer(timeLeft.length-1,upcomingDate)
+  
+setTodo([...todo,newTodo])
 }
+
+const handleTimer = (index,upcomingDate) => {
+  const initialTimeLeft = timeLeft[index]
+  console.log("Initila timeya",initialTimeLeft)
+
+setInterval(()=>{
+  const currentDate = new Date();
+
+  const timeDifference = upcomingDate - currentDate; // Difference in milliseconds
+  const days = Math.floor(timeDifference / (1000 * 60 * 60 * 24));
+  const hours = Math.floor((timeDifference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+  const minutes = Math.floor((timeDifference % (1000 * 60 * 60)) / (1000 * 60));
+  timeLeft[index]=`Time difference: ${days} days, ${hours} hours, ${minutes} minutes`
+  console.log(days,hours,minutes)
+},60000)
+
+};
 
 const handleDelete=(index)=>{
 const updatedTodos = todo.filter((_, i) => i !== index)
  setTodo(updatedTodos) 
+
 }
 
 
@@ -36,6 +68,8 @@ const  handleEdit=async(event,index)=>{
   todo[index] = {...todo[index],[event.target.id]:event.target.textContent};
 
 }
+
+
 
 
 
@@ -91,6 +125,8 @@ const  handleEdit=async(event,index)=>{
                     completed={elem.completed} 
                     delFun={()=>handleDelete(index)}
                     editFun={(event)=>{handleEdit(event,index)}}
+                    timer={timeLeft[index]}
+                    
                     />
               )
         })
